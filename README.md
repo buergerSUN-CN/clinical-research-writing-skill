@@ -8,7 +8,7 @@ A Claude skill that makes clinical research manuscripts read as genuine **clinic
 
 - **Mode A** — diagnose & rewrite a draft section or excerpt.
 - **Mode B** — draft a section from scratch.
-- **Mode C** — polish a whole manuscript: classify study type → split into sections → triage → per-section rewrite (parallelizable) → cross-section "golden-thread" consistency pass → severity-ranked report **or** a tracked-changes `.docx`.
+- **Mode C** — polish a whole manuscript: classify study type → split into sections → triage → per-section rewrite (parallelizable) → cross-section "golden-thread" consistency pass → one or more of: a severity-ranked report, a **tracked-changes revised `.docx`**, and a **pure-Chinese 《修改理由》`.docx`** explaining every edit.
 
 The central idea: basic-science writing makes the *mechanism* the subject; clinical writing makes the *patient and the bedside decision* the subject. It never fabricates data — only reframes, restructures, and trims.
 
@@ -25,6 +25,7 @@ references/
   domain-notes.md                         # neurovascular/imaging scales, stats, reporting standards
 scripts/
   apply_tracked_changes.py                # apply an edits.json to an unpacked .docx as Word tracked changes + comments
+  build_rationale_docx.py                 # format a Chinese 《修改理由》 Markdown into Word (flat house format)
 ```
 
 ## Install
