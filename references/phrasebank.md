@@ -1,8 +1,10 @@
 # Clinical Voice Phrasebank
 
-Reusable, **verbatim** phrases and templates harvested from the 14-paper corpus, grouped by rhetorical function. Adapt the bracketed slots to your study. These are scaffolding for clinical voice — never copy a full sentence with its specific numbers; lift the *frame*, not the data.
+Distilled from 21 exemplar papers — a Nanjing neurovascular/stroke + neuroimaging group (single-centre observational, imaging/diagnostic-accuracy) plus landmark multicentre RCTs (NEJM/Lancet/JAMA, basilar-artery-occlusion thrombectomy). Every exemplar is quoted verbatim, tagged with its source paperNN; three genres are distinguished throughout.
 
-35 categories.
+Reusable VERBATIM phrases. Lift the *frame*, adapt bracketed slots; never copy a sentence with its original numbers.
+
+37 categories.
 
 ## Disease-burden / standard-of-care opener
 
@@ -315,3 +317,16 @@ Reusable, **verbatim** phrases and templates harvested from the 14-paper corpus,
 
 - Radiation dose parameters, including volume computed tomography dose index (CTDIvol) and dose-length product (DLP), [were reported]. (paper09)
 - CTDIvol, mGy: 18.2 (17.9–20.5); DLP, mGycm: 311.0 (300.0–535.0) (paper09)
+
+## Figure / table reference phrasing (in-text call-outs)
+
+- The mean volumetric difference between CTP-estimated ischemic core and final infarct was −21.1 mL (LoA, −124.7 to 86 mL) (Fig. 1). (paper11)
+- UHR PCD-CTA achieved excellent diagnostic performance for ISR detection, with a sensitivity of 100.0% (14/14), specificity of 97.3% (36/37), positive predictive value of 93.3% (14/15), negative predictive value of 100.0% (36/36), and overall accuracy of 98.0% (50/51; Table S1 and Figure 2). (paper09)
+
+## Figure-legend / footnote / table-key phrasing (panel keys, scale anchors, interpretive bands)
+
+- Subjective image quality of the in-stent lumen was assessed using a 5-point Likert scale (1=excellent, no artifacts ...). (paper09)
+- Agreement was interpreted as poor (κ <0.40), fair (κ = 0.40–0.60), good (κ = 0.60–0.80), or excellent (κ >0.80). (paper09)
+- cient and ICC were interpreted as follows: slight correlation or agreement, 0.000–0.200; fair correlation or agreement, 0.201–0.400; moderate correlation or agreement, 0.401–0.600; good correlation or agreement, 0.601–0.800; excellent correlation or agreement, 0.801–1.000 (paper12)
+- Methodology • retrospective • case-control study • performed at one institution (paper14)
+- Statistics and biometry No complex statistical methods were necessary. (paper12, paper13)

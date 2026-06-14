@@ -2,7 +2,7 @@
 
 A Claude skill that makes clinical research manuscripts read as genuine **clinical** research rather than basic science — diagnosing and rewriting toward patient- and decision-centered framing, in the voice of strong clinical exemplars, and with concision.
 
-> **Status: work in progress (private).** Distilled from a curated corpus of neurovascular/stroke and neuroimaging clinical papers. To be refined before any public release.
+> **Status: work in progress (private).** Distilled (multi-agent, per-section deep read) from 21 exemplar papers across three genres — a neurovascular/stroke + neuroimaging group's single-centre observational and imaging/diagnostic-accuracy work, plus landmark multicentre RCTs (NEJM/Lancet/JAMA). To be refined before any public release.
 
 ## What it does
 
@@ -17,9 +17,11 @@ The central idea: basic-science writing makes the *mechanism* the subject; clini
 ```
 SKILL.md                                  # core: philosophy, contrast table, checklist, workflow
 references/
-  section-playbook.md                     # 8-section moves / pitfalls / exemplars / variants
-  phrasebank.md                           # categorized verbatim clinical-voice phrases
-  diagnostic-checklist.md                 # full "too basic-science?" checklist
+  section-playbook.md                     # 8-section moves / pitfalls / exemplars / 3-genre variants
+  phrasebank.md                           # 37 categories of verbatim clinical-voice phrases
+  figures-tables-legends.md               # figure legends, figure/table titles, table footnotes (deep-studied)
+  diagnostic-checklist.md                 # full 43-item "too basic-science?" checklist
+  contrast-table-full.md                  # long-form clinical-vs-basic-science contrast, grounded
   cross-section-consistency.md            # whole-manuscript golden-thread checks
   effect-interpretation-and-reporting.md  # significance vs magnitude, NNT, TRIPOD, etc.
   domain-notes.md                         # neurovascular/imaging scales, stats, reporting standards

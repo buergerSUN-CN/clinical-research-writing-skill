@@ -17,7 +17,7 @@ description: >-
 
 # Clinical Research Writing
 
-This skill encodes what makes clinical research papers read as *clinical* rather than *basic science*. It was distilled from 14 hand-picked exemplar papers of a neurovascular/stroke + neuroimaging group (corresponding authors Sheng Liu, Hai-Bin Shi, Fei-Yun Wu; journals incl. JAHA, Translational Stroke Research, European Radiology, Academic Radiology, JNIS). Every exemplar quoted in the reference files is verbatim and tagged with its source paper.
+This skill encodes what makes clinical research papers read as *clinical* rather than *basic science*. It was distilled (multi-agent, per-section deep read) from 21 hand-picked exemplar papers spanning three genres: a neurovascular/stroke + neuroimaging group's single-centre observational and imaging/diagnostic-accuracy work (corresponding authors Sheng Liu, Hai-Bin Shi, Fei-Yun Wu; JAHA, Translational Stroke Research, European Radiology, Academic Radiology, JNIS) **and** landmark multicentre RCTs (NEJM, Lancet, JAMA — basilar-artery-occlusion thrombectomy). Every exemplar quoted in the reference files is verbatim and tagged with its source paper; `variant notes` flag where the three genres diverge.
 
 ## The one idea behind everything
 
@@ -97,7 +97,7 @@ The script enforces the required house format: **flat** (no heading/semantic sty
 
 ## Quick diagnostic (the "too basic-science?" smell test)
 
-Scan the draft for these. Each "no" is a fix. (Full, study-type-aware 21-point version with caveats: `references/diagnostic-checklist.md`.)
+Scan the draft for these. Each "no" is a fix. (Full, genre-aware 43-item version with caveats: `references/diagnostic-checklist.md`.)
 
 - **Intro sentence 1** states disease burden / standard-of-care limitation / residual-burden-despite-treatment — *not* a molecular gap.
 - **The aim** is a clinical, prognostic, or diagnostic *decision*. ("to investigate the **mechanism/biological role** of …" is the red flag; "to evaluate the **predictive/diagnostic value** of …" is fine.)
@@ -117,15 +117,19 @@ Scan the draft for these. Each "no" is a fix. (Full, study-type-aware 21-point v
 - **Effect magnitude is interpreted clinically**, not just shown — is the effect big enough to change management; is a wide CI flagged; is a non-significant result framed as "not detected" rather than "no effect"? (see `references/effect-interpretation-and-reporting.md`)
 - **Relative effects are paired with absolute risk** (and NNT/NNH where the design allows); no OR/HR/RRR reported alone in the Abstract or Conclusion.
 - **Prediction-model / risk-score / cut-off papers** report calibration *and* discrimination and address internal validation/optimism (a cut-off derived and tested in one sample is optimistic) — TRIPOD expectations.
+- **Figure legends & table footnotes are self-contained and clinical** — each names the endpoint + its cut-off, the test, and the cohort, expands abbreviations, and (for figures) tells the reader what to read off the panel; nothing forces a trip back to the text. (see `references/figures-tables-legends.md`)
+- **Concision** — the key clinical message in the fewest plain words; engineering/method detail pushed to the supplement.
 
 ## Reference files
 
 Load these as needed (they are large and detailed; don't load all at once):
 
-- `references/section-playbook.md` — the 8-section playbook: clinical moves, pitfalls, verbatim exemplars, and interventional-vs-imaging variant notes. **Read the relevant section before drafting/rewriting it.**
-- `references/phrasebank.md` — 35 categories of verbatim, reusable framing phrases. Lift the *frame*, adapt the bracketed slots — never copy a sentence with its original numbers.
-- `references/diagnostic-checklist.md` — the full 21-point checklist with study-type caveats.
-- `references/domain-notes.md` — neurovascular/stroke + neuroimaging scales, statistics, and reporting-standard conventions (mRS, ASPECTS, TICI, PSM, STROBE; index test/reference standard, κ, VIF, DeLong, Bland-Altman, Eur Radiol Key Points block, etc.).
+- `references/section-playbook.md` — the 8-section playbook (Title→Conclusion): clinical moves, pitfalls, verbatim exemplars, and variant notes across the three genres. **Read the relevant section before drafting/rewriting it.**
+- `references/phrasebank.md` — 37 categories of verbatim, reusable framing phrases. Lift the *frame*, adapt the bracketed slots — never copy a sentence with its original numbers.
+- `references/figures-tables-legends.md` — how to write figure legends/captions, figure & table titles, and table footnotes so they are self-contained and guide clinical interpretation (deep-studied; read before writing any display-item text).
+- `references/diagnostic-checklist.md` — the full 43-item checklist with genre caveats (now incl. figure/legend, table-footnote, and concision checks).
+- `references/contrast-table-full.md` — the detailed clinical-vs-basic-science contrast (the long-form of the table above), grounded with exemplars.
+- `references/domain-notes.md` — neurovascular/stroke + neuroimaging scales, statistics, and reporting-standard conventions (mRS, ASPECTS, TICI, PSM, STROBE/CONSORT/TRIPOD; index test/reference standard, κ, VIF, DeLong, Bland-Altman, Eur Radiol Key Points block, RCT conventions, etc.).
 - `references/cross-section-consistency.md` — the golden-thread / coherence checks for a whole-manuscript pass (Mode C, step 5).
 - `references/effect-interpretation-and-reporting.md` — interpreting effects clinically: significance vs magnitude/MCID, absolute risk & NNT, prediction-model/TRIPOD reporting, and methodological completeness.
 
