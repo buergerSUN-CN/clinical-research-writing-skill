@@ -125,10 +125,14 @@ def split_runs(p, runs, start, end):
     last_run_index = parent_children.index(end_run)
     prefix_run = make_run(start_rpr, prefix) if prefix else None
     suffix_run = make_run(end_rpr, suffix) if suffix else None
+    # dominant rPr = rPr of the in-span run holding the most text, so an inserted replacement
+    # matches the body formatting rather than a short leading label (e.g. a bold "Figure 1.").
+    dom = max(offs[sidx : eidx + 1], key=lambda o: len(run_text(o[2])))[2]
+    dom_rpr = dom.find(q("rPr"))
     # remove the original run span
     for r in runs[sidx : eidx + 1]:
         p.remove(r)
-    return first_run_index, prefix_run, copy.deepcopy(start_rpr) if start_rpr is not None else None, suffix_run
+    return first_run_index, prefix_run, copy.deepcopy(dom_rpr) if dom_rpr is not None else None, suffix_run
 
 
 def main():
