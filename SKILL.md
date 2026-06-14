@@ -119,11 +119,13 @@ Scan the draft for these. Each "no" is a fix. (Full, genre-aware 43-item version
 - **Prediction-model / risk-score / cut-off papers** report calibration *and* discrimination and address internal validation/optimism (a cut-off derived and tested in one sample is optimistic) — TRIPOD expectations.
 - **Figure legends & table footnotes are self-contained and clinical** — each names the endpoint + its cut-off, the test, and the cohort, expands abbreviations, and (for figures) tells the reader what to read off the panel; nothing forces a trip back to the text. (see `references/figures-tables-legends.md`)
 - **Concision** — the key clinical message in the fewest plain words; engineering/method detail pushed to the supplement.
+- **Results is interpretation-free** — numbers, comparisons, and outcomes only; NO narrative/editorial framing ("the central paradox", "tension", "the central question", "carry to the bedside", "strikingly", "intriguingly"). The *why* (paradoxes, implications) goes in the Discussion, never in Results.
 
 ## Reference files
 
 Load these as needed (they are large and detailed; don't load all at once):
 
+- `references/basic-writing-requirements.md` — **foundational academic-writing rules underneath the clinical voice** (section roles incl. **Results = facts only / Discussion = interpretation**, paragraph craft, hedging, reporting basics; distilled from the academic-research-skills plugin). When rewriting any section, obey these basics first, then layer the clinical voice. The Results-vs-Discussion boundary here is load-bearing.
 - `references/section-playbook.md` — the 8-section playbook (Title→Conclusion): clinical moves, pitfalls, verbatim exemplars, and variant notes across the three genres. **Read the relevant section before drafting/rewriting it.**
 - `references/phrasebank.md` — 37 categories of verbatim, reusable framing phrases. Lift the *frame*, adapt the bracketed slots — never copy a sentence with its original numbers.
 - `references/figures-tables-legends.md` — how to write figure legends/captions, figure & table titles, and table footnotes so they are self-contained and guide clinical interpretation (deep-studied; read before writing any display-item text).
@@ -138,6 +140,7 @@ Load these as needed (they are large and detailed; don't load all at once):
 - **Never fabricate or alter data, statistics, or citations.** This skill changes framing, emphasis, and structure — not results. If a clinical number the framing needs (an OR, a CI, an event rate) is genuinely absent from the source, flag the gap to the user; do not invent it.
 - **Match study type.** A diagnostic-accuracy paper should not be dressed in ROC/AUC it doesn't have; a procedural-comparative paper need not force an adjusted OR. The variant notes and checklist parentheticals say when a pattern does *not* apply.
 - **Stay measured.** Clinical voice is hedged and decision-oriented, not hyped. Strip "novel/first-ever/elucidate the mechanism" framing.
+- **Results states facts, not interpretation.** Report what was found (rates, effects, CIs) plainly; keep interpretive/narrative framing — "the central paradox", "tension", "the central question", "carry to the bedside", "strikingly" — OUT of Results. Paradoxes, mechanisms, and clinical implications belong in the Discussion. The **clinical-dilemma opener** and the **clinical-implications landing** are Introduction/Discussion moves only — never apply them to Results or Methods.
 - **Don't copy exemplar sentences verbatim into a real manuscript.** They are style models; reuse the structure, not the content.
 - **Don't fabricate methods or analyses.** A failed checklist item often means the study *didn't do* something (no calibration, no sensitivity analysis, no blinded read). That is a note to the author or a limitation to state — never license to invent an analysis, a reference standard, or a clinical implication the data don't support.
 - **Finished / submitted manuscripts: be conservative.** Preserve the author's voice and structure; edit only what genuinely fails a check; report rather than silently rewrite; keep numbers and citations untouched.
