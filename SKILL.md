@@ -60,11 +60,11 @@ A full paper is **not** one big diagnostic pass — split it, polish by section,
 3. **Triage**: skim each unit against the Quick diagnostic; mark which actually need work — don't churn clean sections.
 4. **Rewrite** each flagged unit with its playbook section. Independent sections can be done in parallel (one agent per section) for a long manuscript.
 5. **Join — run the cross-section consistency pass** (`references/cross-section-consistency.md`): the golden thread (aim→conclusion), numeric reconciliation, terminology, and claim-gradient checks. This is the highest-value whole-manuscript step and cannot be done section-by-section.
-6. **Deliver** in one (or both) of the two forms below.
+6. **Deliver** in any of the three forms below (the user usually wants Output 2 + Output 3 together).
 
 **Output 1 — Markdown revision report:** (1) one-line study-type classification; (2) a findings table (section · offending text · failed check · severity · suggested rewrite); (3) the cross-section thread map and any breaks; (4) a short prioritized revision checklist. Keep numbers and citations untouched.
 
-**Output 2 — Tracked-changes `.docx`** (when the user wants edits applied in the manuscript itself). Apply the findings as real Word tracked changes (`w:ins`/`w:del`) plus margin comments, using the bundled script `scripts/apply_tracked_changes.py`. **Conservative rule:** make only the *safe wording* fixes as tracked edits; anything needing a number or detail the source lacks (event rates, CIs, blinded-read specifics) becomes a **comment**, never a fabricated insertion.
+**Output 2 — Tracked-changes revised `.docx`** (edits applied in the manuscript itself). Rewrite **boldly, concisely, and in the exemplars' voice** (see *Edit boldly* and *Say it simply* above): recast whole sentences and openings, trim wordiness, aim for **net fewer words**. **Never fabricate** — every number in an edit must be lifted verbatim from somewhere in the manuscript; anything that needs a number or detail the source genuinely lacks (unreported event rates, CIs, blinded-read specifics) becomes a **comment**, not an invented insertion. Apply with the bundled `scripts/apply_tracked_changes.py` — it protects fields/cross-references and guarantees that rejecting all changes restores the original exactly.
 
 Pipeline (needs the `docx` skill's `unpack.py`/`pack.py`):
 ```bash
@@ -72,7 +72,17 @@ python <docx-skill>/scripts/office/unpack.py manuscript.docx unpacked/
 python <this-skill>/scripts/apply_tracked_changes.py unpacked/ edits.json --author "Claude"
 python <docx-skill>/scripts/office/pack.py unpacked/ manuscript_revised.docx --original manuscript.docx
 ```
-Build `edits.json` from the findings — a list of `{"type":"replace","find":"…","replace":"…","comment":"…"}`, `{"type":"insert_after",…}`, or `{"type":"comment","find":"…","comment":"…"}`. Each `find` is verbatim source text; use `[brackets]` in `replace`/`insert` for any number not in the source. See the script's header for details. Verify with `pandoc --track-changes=all manuscript_revised.docx`.
+Build `edits.json` from the findings — a list of `{"type":"replace","find":"…","replace":"…"}`, `{"type":"insert_after","find":"…","insert":"…"}`, or `{"type":"comment","find":"…","comment":"…"}`. Each `find` is verbatim source text **within one paragraph**; use `[brackets]` for any number not in the source. For a long manuscript, generate the edits with per-section agents plus an adversarial pass that confirms every number is verbatim in the source, then apply. Verify with `pandoc --track-changes=all manuscript_revised.docx`.
+
+**Output 3 — Chinese rationale `.docx` (《修改理由》)** — a reviewer-/supervisor-facing explainer of every edit. Write it in **pure Chinese**, two short lines per edit:
+> **改动**：用一句中文转述把什么改成了什么（不要贴英文整句）。
+> **理由**：1–2 句中文，点明对应的临床写作原则；涉及数字注明原文出处（行号/表号）。
+
+Keep only unavoidable term abbreviations (AUC, mRS, trial names…) — no full English sentences (the user finds bilingual mixing hard to read). Group by IMRaD section; put any `comment`-type items under a 「### 建议补充（批注）」 subheading. Save the rationale as Markdown (`#` title, `##`/`###` subheadings, body lines, inline `**bold**`), then format it to Word with the bundled script:
+```bash
+python <this-skill>/scripts/build_rationale_docx.py 修改理由.md manuscript_修改理由.docx
+```
+The script enforces the required house format: **flat** (no heading/semantic styles — hierarchy only via size + bold), title 13 pt bold / subheading 11 pt bold / body 11 pt, line spacing 1.15, space-after 0.5 line, justified, Chinese in 宋体 and English/digits in Times New Roman, A4.
 
 ## Clinical vs basic-science — the contrast at a glance
 
