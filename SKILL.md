@@ -19,22 +19,24 @@ description: >-
 
 This skill encodes what makes clinical research papers read as *clinical* rather than *basic science*. It was distilled (multi-agent, per-section deep read) from 21 hand-picked exemplar papers spanning three genres: a neurovascular/stroke + neuroimaging group's single-centre observational and imaging/diagnostic-accuracy work (corresponding authors Sheng Liu, Hai-Bin Shi, Fei-Yun Wu; JAHA, Translational Stroke Research, European Radiology, Academic Radiology, JNIS) **and** landmark multicentre RCTs (NEJM, Lancet, JAMA — basilar-artery-occlusion thrombectomy). Every exemplar quoted in the reference files is verbatim and tagged with its source paper; `variant notes` flag where the three genres diverge.
 
-## The one idea behind everything
+## Core principles
 
-**Basic-science writing makes the mechanism the subject. Clinical writing makes the patient and the bedside decision the subject.** Mechanism is still present — but demoted to *supportive plausibility*, never the headline. If a sentence's center of gravity is a pathway, a molecule, or "understanding biology," it reads basic-science. If it is a patient population, a clinical endpoint, a risk, or a management decision, it reads clinical.
+Three principles sit underneath every mode below. They assume the academic-writing basics in `references/basic-writing-requirements.md` (section roles, paragraph craft, hedging) — obey those first, then layer the clinical voice on top.
 
-Everything below is a way of pushing the center of gravity toward the patient and the decision.
+### 1. Center of gravity — the patient and the decision, not the mechanism
 
-## Say it simply — concision is clinical
+**Basic-science writing makes the mechanism the subject. Clinical writing makes the patient and the bedside decision the subject.** Mechanism is still present — but demoted to *supportive plausibility*, never the headline. If a sentence's center of gravity is a pathway, a molecule, or "understanding biology," it reads basic-science. If it is a patient population, a clinical endpoint, a risk, or a management decision, it reads clinical. Everything else here is a way of pushing the center of gravity toward the patient and the decision.
+
+### 2. Concision is clinical — say it simply
 
 The best clinical papers state the most important clinical question in the fewest, plainest words ("用最简单的方式说出最重要的临床问题"). Clinicians read fast; every extra clause is a cost, and economy is itself a marker of good clinical writing. Reframing toward clinical voice must **not** add bulk:
 
 - Prefer the shortest version that keeps the meaning and the numbers.
 - Cut throat-clearing ("It is worth noting that…"), nominalizations ("performed an evaluation of" → "evaluated"), hedge-stacking, and redundancy.
-- Push engineering/method granularity to the supplement; the main text carries the clinical point.
+- Push engineering/method granularity to a real supplement, or cut it; the main text carries the clinical point.
 - A pure-deletion tracked edit that only trims is often the highest-value one. **Net word count should usually go down, not up.**
 
-## Edit boldly, in the exemplars' voice
+### 3. Edit boldly, in the exemplars' voice
 
 When asked to polish a real manuscript, **make the edits** (tracked changes) — do not hide behind margin comments. Reserve comments only for data genuinely missing from the source (an unmeasured statistic, blinded-read details); many "missing" numbers already exist elsewhere in the manuscript and should be pulled in verbatim, not flagged. Rewrite **boldly** — recast whole sentences and openings — and match how the target group actually writes by modelling `references/phrasebank.md` and the exemplar sentences in `references/section-playbook.md`, rather than a generic clinical register. The bar is: would this pass for one of the exemplar papers?
 
@@ -59,12 +61,12 @@ A full paper is **not** one big diagnostic pass — split it, polish by section,
 2. **Split** into units: Title, structured Abstract / journal boxes (Key Points, Clinical relevance), Introduction, Methods, Results, Discussion, Limitations, Conclusion, plus Tables and figure legends. (For `.docx`, convert with the `docx`/`markitdown` tooling first.)
 3. **Triage**: skim each unit against the Quick diagnostic; mark which actually need work — don't churn clean sections.
 4. **Rewrite** each flagged unit with its playbook section. Independent sections can be done in parallel (one agent per section) for a long manuscript.
-5. **Join — run the cross-section consistency pass** (`references/cross-section-consistency.md`): the golden thread (aim→conclusion), numeric reconciliation, terminology, and claim-gradient checks. This is the highest-value whole-manuscript step and cannot be done section-by-section.
+5. **Join — run the cross-section consistency pass (MANDATORY, do not skip)** (`references/cross-section-consistency.md`): the golden thread (aim→conclusion), numeric reconciliation, terminology, claim-gradient, **dangling cross-references** (no pointer to a Supplementary/appendix item the paper doesn't actually contain), AND **Methods↔Results fidelity** — every metric reported in Results/Tables/figure legends must still be described in Methods. Corollary for Methods trimming: **never delete a method whose numeric output appears in Results/Tables/legends** (e.g. don't drop "Jacobian-based volume preservation" from Methods while Results reports the Jacobian error). This whole-manuscript step is the highest-value one and cannot be done section-by-section; skipping it is what lets seam and fidelity errors through.
 6. **Deliver** in any of the three forms below (the user usually wants Output 2 + Output 3 together).
 
 **Output 1 — Markdown revision report:** (1) one-line study-type classification; (2) a findings table (section · offending text · failed check · severity · suggested rewrite); (3) the cross-section thread map and any breaks; (4) a short prioritized revision checklist. Keep numbers and citations untouched.
 
-**Output 2 — Tracked-changes revised `.docx`** (edits applied in the manuscript itself). Rewrite **boldly, concisely, and in the exemplars' voice** (see *Edit boldly* and *Say it simply* above): recast whole sentences and openings, trim wordiness, aim for **net fewer words**. **Never fabricate** — every number in an edit must be lifted verbatim from somewhere in the manuscript; anything that needs a number or detail the source genuinely lacks (unreported event rates, CIs, blinded-read specifics) becomes a **comment**, not an invented insertion. Apply with the bundled `scripts/apply_tracked_changes.py` — it protects fields/cross-references and guarantees that rejecting all changes restores the original exactly.
+**Output 2 — Tracked-changes revised `.docx`** (edits applied in the manuscript itself). Rewrite **boldly, concisely, and in the exemplars' voice** (see *Core principles* above): recast whole sentences and openings, trim wordiness, aim for **net fewer words**. **Never fabricate** — every number in an edit must be lifted verbatim from somewhere in the manuscript; anything that needs a number or detail the source genuinely lacks (unreported event rates, CIs, blinded-read specifics) becomes a **comment**, not an invented insertion. Apply with the bundled `scripts/apply_tracked_changes.py` — it protects fields/cross-references and guarantees that rejecting all changes restores the original exactly.
 
 Pipeline (needs the `docx` skill's `unpack.py`/`pack.py`):
 ```bash
@@ -72,7 +74,13 @@ python <docx-skill>/scripts/office/unpack.py manuscript.docx unpacked/
 python <this-skill>/scripts/apply_tracked_changes.py unpacked/ edits.json --author "Claude"
 python <docx-skill>/scripts/office/pack.py unpacked/ manuscript_revised.docx --original manuscript.docx
 ```
-Build `edits.json` from the findings — a list of `{"type":"replace","find":"…","replace":"…"}`, `{"type":"insert_after","find":"…","insert":"…"}`, or `{"type":"comment","find":"…","comment":"…"}`. Each `find` is verbatim source text **within one paragraph**; use `[brackets]` for any number not in the source. For a long manuscript, generate the edits with per-section agents plus an adversarial pass that confirms every number is verbatim in the source, then apply. Verify with `pandoc --track-changes=all manuscript_revised.docx`.
+Build `edits.json` from the findings — a list of `{"type":"replace","find":"…","replace":"…"}`, `{"type":"insert_after","find":"…","insert":"…"}`, or `{"type":"comment","find":"…","comment":"…"}`. Each `find` is verbatim source text **within one paragraph**; use `[brackets]` for any number not in the source. For a long manuscript, generate the edits with per-section agents plus an adversarial pass, then apply. Verify with `pandoc --track-changes=all manuscript_revised.docx`.
+
+**Edit mechanics — avoid seam errors (this is the failure mode that bites):**
+- A `find` must start AND end at a sentence or clause boundary, and must **include any leading connective the rewrite changes or drops** ("By contrast", "However", "Therefore"). Anchoring after the connective orphans it — e.g. find "contrast, MeVO…" → "By In the MeVO…".
+- A `replace` must be a **grammatically complete** unit that, substituted in place (prefix + replace + suffix), yields a clean, complete sentence — no dropped verbs, no comma-splices ("…cross-validation, combined-model discrimination was AUC…" is broken; keep the verb: "…left discrimination essentially unchanged (…)").
+- `insert_after` text must not glue to the anchor — never anchor immediately after a citation superscript, and keep a separating space (the script auto-spaces, but check), e.g. avoid "neuroscience.30-31These findings…".
+- **Verification MUST include a seam/grammar pass, not just number-checking:** for every edit, substitute it into the surrounding text and confirm the whole sentence is grammatical and the joins read cleanly; reject or repair otherwise.
 
 **Output 3 — Chinese rationale `.docx` (《修改理由》)** — a reviewer-/supervisor-facing explainer of every edit. Write it in **pure Chinese**, two short lines per edit:
 > **改动**：用一句中文转述把什么改成了什么（不要贴英文整句）。
@@ -121,19 +129,26 @@ Scan the draft for these. Each "no" is a fix. (Full, genre-aware 43-item version
 - **Concision** — the key clinical message in the fewest plain words; engineering/method detail pushed to the supplement.
 - **Results is interpretation-free** — numbers, comparisons, and outcomes only; NO narrative/editorial framing ("the central paradox", "tension", "the central question", "carry to the bedside", "strikingly", "intriguingly"). The *why* (paradoxes, implications) goes in the Discussion, never in Results.
 
-## Reference files
+## Reference map — what to load when
 
-Load these as needed (they are large and detailed; don't load all at once):
+All files live flat in `references/`. They are large and detailed; load only what the task needs, never all at once.
 
-- `references/basic-writing-requirements.md` — **foundational academic-writing rules underneath the clinical voice** (section roles incl. **Results = facts only / Discussion = interpretation**, paragraph craft, hedging, reporting basics; distilled from the academic-research-skills plugin). When rewriting any section, obey these basics first, then layer the clinical voice. The Results-vs-Discussion boundary here is load-bearing.
+**Foundation — load first, for any section:**
+- `references/basic-writing-requirements.md` — academic-writing rules underneath the clinical voice (section roles incl. **Results = facts only / Discussion = interpretation**, paragraph craft, hedging, reporting basics; distilled from the academic-research-skills plugin). Obey these basics first, then layer the clinical voice. The Results-vs-Discussion boundary here is load-bearing.
+
+**Drafting or rewriting a section — Mode A / Mode B:**
 - `references/section-playbook.md` — the 8-section playbook (Title→Conclusion): clinical moves, pitfalls, verbatim exemplars, and variant notes across the three genres. **Read the relevant section before drafting/rewriting it.**
 - `references/phrasebank.md` — 37 categories of verbatim, reusable framing phrases. Lift the *frame*, adapt the bracketed slots — never copy a sentence with its original numbers.
-- `references/figures-tables-legends.md` — how to write figure legends/captions, figure & table titles, and table footnotes so they are self-contained and guide clinical interpretation (deep-studied; read before writing any display-item text).
-- `references/diagnostic-checklist.md` — the full 43-item checklist with genre caveats (now incl. figure/legend, table-footnote, and concision checks).
-- `references/contrast-table-full.md` — the detailed clinical-vs-basic-science contrast (the long-form of the table above), grounded with exemplars.
+- `references/figures-tables-legends.md` — how to write figure legends/captions, figure & table titles, and table footnotes so they are self-contained and guide clinical interpretation (read before writing any display-item text).
 - `references/domain-notes.md` — neurovascular/stroke + neuroimaging scales, statistics, and reporting-standard conventions (mRS, ASPECTS, TICI, PSM, STROBE/CONSORT/TRIPOD; index test/reference standard, κ, VIF, DeLong, Bland-Altman, Eur Radiol Key Points block, RCT conventions, etc.).
-- `references/cross-section-consistency.md` — the golden-thread / coherence checks for a whole-manuscript pass (Mode C, step 5).
+
+**Diagnosing "too basic-science":**
+- `references/diagnostic-checklist.md` — the full 43-item checklist with genre caveats (incl. figure/legend, table-footnote, and concision checks).
+- `references/contrast-table-full.md` — the detailed clinical-vs-basic-science contrast (the long-form of the table above), grounded with exemplars.
 - `references/effect-interpretation-and-reporting.md` — interpreting effects clinically: significance vs magnitude/MCID, absolute risk & NNT, prediction-model/TRIPOD reporting, and methodological completeness.
+
+**Whole-manuscript pass — Mode C, step 5:**
+- `references/cross-section-consistency.md` — the golden-thread / coherence checks (aim→conclusion, numeric reconciliation, terminology, claim-gradient, Methods↔Results fidelity, and dangling cross-references).
 
 ## Hard rules
 
@@ -143,5 +158,6 @@ Load these as needed (they are large and detailed; don't load all at once):
 - **Results states facts, not interpretation.** Report what was found (rates, effects, CIs) plainly; keep interpretive/narrative framing — "the central paradox", "tension", "the central question", "carry to the bedside", "strikingly" — OUT of Results. Paradoxes, mechanisms, and clinical implications belong in the Discussion. The **clinical-dilemma opener** and the **clinical-implications landing** are Introduction/Discussion moves only — never apply them to Results or Methods.
 - **Don't copy exemplar sentences verbatim into a real manuscript.** They are style models; reuse the structure, not the content.
 - **Don't fabricate methods or analyses.** A failed checklist item often means the study *didn't do* something (no calibration, no sensitivity analysis, no blinded read). That is a note to the author or a limitation to state — never license to invent an analysis, a reference standard, or a clinical implication the data don't support.
+- **Don't cite a supplement (or appendix) the paper doesn't have.** Never point to a "Supplementary Methods/Table/Figure", an appendix, or "data not shown" unless the source manuscript actually contains it. When trimming pushes detail out of the main text, either keep it concise in-text or leave a comment for the author to add a supplement — do not invent the pointer. (This is the dangling-"Supplementary Methods" failure mode.)
 - **Finished / submitted manuscripts: be conservative.** Preserve the author's voice and structure; edit only what genuinely fails a check; report rather than silently rewrite; keep numbers and citations untouched.
 - **This skill does clinical *reframing*, not language polish.** It changes what the writing is *about* (center of gravity, framing, structure). For grammar, flow, and journal-style English use a language-polish skill (e.g. `nature-polishing`), and for AI-text smoothing `humanizer_academic` — run clinical reframing first, polish second. Don't duplicate their job.

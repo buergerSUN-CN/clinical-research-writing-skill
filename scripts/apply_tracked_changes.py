@@ -189,7 +189,12 @@ def main():
         elif etype == "insert_after":
             nodes.append(make_run(rpr, orig))  # keep anchor text verbatim
             wid += 1
-            nodes.append(wrap_ins_del("ins", wid, args.author, args.date, make_run(rpr, e["insert"])))
+            ins_text = e["insert"]
+            # avoid gluing the inserted text to the anchor (e.g. right after a citation
+            # superscript like "30-31These ..."): add a separating space when needed.
+            if orig and not orig[-1].isspace() and ins_text and ins_text[0] not in " \n(":
+                ins_text = " " + ins_text
+            nodes.append(wrap_ins_del("ins", wid, args.author, args.date, make_run(rpr, ins_text)))
         elif etype == "comment":
             nodes.append(make_run(rpr, orig))  # keep text verbatim, just anchor a comment
         else:
