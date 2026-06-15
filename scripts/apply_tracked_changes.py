@@ -22,7 +22,10 @@ Rules baked in for the skill's "never fabricate" floor:
   - For data the author must supply (event rates, CIs, blinded-read details), use `comment`,
     not a fabricated insertion.
 
-The script preserves the matched run's run-properties (rPr) so bold/font/size survive.
+The script preserves each matched run's run-properties (rPr) — bold, superscript, font,
+size — on kept-anchor and deleted text, so display formatting survives and rejecting a
+change restores the source exactly. (New inserted text carries the span's dominant format,
+which is why the SKILL's edit-mechanics rule keeps superscript citations out of replace spans.)
 """
 import argparse, json, os, sys, copy
 from lxml import etree
@@ -69,13 +72,19 @@ def make_run(rpr, text, deleted=False):
     return r
 
 
-def wrap_ins_del(tag, wid, author, date, run):
+def wrap_ins_del(tag, wid, author, date, runs):
     el = etree.Element(q(tag))
     el.set(q("id"), str(wid))
     el.set(q("author"), author)
     el.set(q("date"), date)
-    el.append(run)
+    for r in (runs if isinstance(runs, list) else [runs]):
+        el.append(r)
     return el
+
+
+def frags_to_runs(frags, deleted=False):
+    """Materialize (rPr, text) fragments into runs, preserving each fragment's own format."""
+    return [make_run(rpr, text, deleted=deleted) for rpr, text in frags]
 
 
 def locate(paras, find):
@@ -95,8 +104,11 @@ def locate(paras, find):
 def split_runs(p, runs, start, end):
     """
     Rebuild paragraph runs so the [start,end) span is isolated.
-    Returns (insert_index, prefix_run_or_None, matched_rpr, suffix_run_or_None,
-             first_run_index, last_run_index). Caller inserts new nodes at insert_index.
+    Returns (insert_index, prefix_run_or_None, span_frags, dom_rpr_or_None, suffix_run_or_None).
+    span_frags is a list of (rPr_or_None, text) reproducing the matched span with each original
+    run's own formatting preserved — so superscript citations / bold labels survive in kept-anchor
+    and deleted text, and rejecting a change restores the source exactly. dom_rpr is the dominant
+    run's rPr, used only for genuinely-new inserted text.
     """
     # cumulative offsets per run
     offs = []
@@ -114,15 +126,20 @@ def split_runs(p, runs, start, end):
     for _, _, r in offs[sidx : eidx + 1]:
         if r.find(q("fldChar")) is not None or r.find(q("instrText")) is not None:
             raise SkipEdit("span crosses a field / cross-reference")
+    # Slice the matched span into per-run fragments, keeping each run's own rPr.
+    span_frags = []
+    for a, b, r in offs[sidx : eidx + 1]:
+        rpr = r.find(q("rPr"))
+        piece = run_text(r)[max(start, a) - a : min(end, b) - a]
+        if piece:
+            span_frags.append((copy.deepcopy(rpr) if rpr is not None else None, piece))
     start_a, _, start_run = offs[sidx]
-    _, end_b, end_run = offs[eidx]
+    end_a, _, end_run = offs[eidx]
     start_rpr = start_run.find(q("rPr"))
     end_rpr = end_run.find(q("rPr"))
     prefix = run_text(start_run)[: start - start_a]
-    suffix = run_text(end_run)[end - offs[eidx][0] :]
-    parent_children = list(p)
-    first_run_index = parent_children.index(start_run)
-    last_run_index = parent_children.index(end_run)
+    suffix = run_text(end_run)[end - end_a :]
+    first_run_index = list(p).index(start_run)
     prefix_run = make_run(start_rpr, prefix) if prefix else None
     suffix_run = make_run(end_rpr, suffix) if suffix else None
     # dominant rPr = rPr of the in-span run holding the most text, so an inserted replacement
@@ -132,7 +149,7 @@ def split_runs(p, runs, start, end):
     # remove the original run span
     for r in runs[sidx : eidx + 1]:
         p.remove(r)
-    return first_run_index, prefix_run, copy.deepcopy(dom_rpr) if dom_rpr is not None else None, suffix_run
+    return first_run_index, prefix_run, span_frags, copy.deepcopy(dom_rpr) if dom_rpr is not None else None, suffix_run
 
 
 def main():
@@ -162,11 +179,10 @@ def main():
             missed.append(e)
             continue
         p, runs, s, end = loc
-        # exact ORIGINAL matched text (real chars, e.g. nbsp) — used verbatim for deletions and
-        # preserved anchors, so that rejecting the tracked changes restores the source exactly.
+        # exact ORIGINAL matched text (real chars, e.g. nbsp) — used only for the auto-space check.
         orig = "".join(run_text(r) for r in runs)[s:end]
         try:
-            ins_at, prefix_run, rpr, suffix_run, = (*split_runs(p, runs, s, end), )
+            ins_at, prefix_run, span_frags, dom_rpr, suffix_run = split_runs(p, runs, s, end)
         except SkipEdit as ex:
             missed.append({**e, "_reason": str(ex)})
             continue
@@ -182,21 +198,24 @@ def main():
         etype = e["type"]
         if etype == "replace":
             wid += 1
-            nodes.append(wrap_ins_del("del", wid, args.author, args.date, make_run(rpr, orig, deleted=True)))
+            # delete the original span preserving its per-run formatting (so reject restores it)
+            nodes.append(wrap_ins_del("del", wid, args.author, args.date, frags_to_runs(span_frags, deleted=True)))
             if e.get("replace"):
                 wid += 1
-                nodes.append(wrap_ins_del("ins", wid, args.author, args.date, make_run(rpr, e["replace"])))
+                # new text carries the dominant run format (citations etc. can't be inferred — the
+                # SKILL's edit-mechanics rule keeps specially-formatted runs out of replace spans)
+                nodes.append(wrap_ins_del("ins", wid, args.author, args.date, make_run(dom_rpr, e["replace"])))
         elif etype == "insert_after":
-            nodes.append(make_run(rpr, orig))  # keep anchor text verbatim
+            nodes.extend(frags_to_runs(span_frags))  # keep anchor with original formatting
             wid += 1
             ins_text = e["insert"]
             # avoid gluing the inserted text to the anchor (e.g. right after a citation
             # superscript like "30-31These ..."): add a separating space when needed.
             if orig and not orig[-1].isspace() and ins_text and ins_text[0] not in " \n(":
                 ins_text = " " + ins_text
-            nodes.append(wrap_ins_del("ins", wid, args.author, args.date, make_run(rpr, ins_text)))
+            nodes.append(wrap_ins_del("ins", wid, args.author, args.date, make_run(dom_rpr, ins_text)))
         elif etype == "comment":
-            nodes.append(make_run(rpr, orig))  # keep text verbatim, just anchor a comment
+            nodes.extend(frags_to_runs(span_frags))  # keep anchor with original formatting
         else:
             missed.append(e); continue
         if cid is not None:
