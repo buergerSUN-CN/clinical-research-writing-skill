@@ -27,6 +27,8 @@ Three principles sit underneath every mode below. They assume the academic-writi
 
 **Basic-science writing makes the mechanism the subject. Clinical writing makes the patient and the bedside decision the subject.** Mechanism is still present — but demoted to *supportive plausibility*, never the headline. If a sentence's center of gravity is a pathway, a molecule, or "understanding biology," it reads basic-science. If it is a patient population, a clinical endpoint, a risk, or a management decision, it reads clinical. Everything else here is a way of pushing the center of gravity toward the patient and the decision.
 
+**Keep the paper's highest-level claim sharp.** Beyond individual sentences, every paper has one top-level conceptual contribution — e.g. *LVO-derived imaging paradigms may not transport to MeVO*, not merely *we built a predictor*. Name it pointedly at the end of the Introduction and own it in the Discussion. Concision and conservatism (below) curb wordiness and overclaim — they must **never** flatten this thesis into generic, interchangeable prose; a "safe" paper that no longer says anything memorable has lost its center of gravity just as surely as a mechanism-obsessed one. Calibrate the claim to the design (a single-centre retrospective cohort is *hypothesis-generating*, not practice-changing) — but make the claim, sharply.
+
 ### 2. Concision is clinical — say it simply
 
 The best clinical papers state the most important clinical question in the fewest, plainest words ("用最简单的方式说出最重要的临床问题"). Clinicians read fast; every extra clause is a cost, and economy is itself a marker of good clinical writing. Reframing toward clinical voice must **not** add bulk:
@@ -35,6 +37,7 @@ The best clinical papers state the most important clinical question in the fewes
 - Cut throat-clearing ("It is worth noting that…"), nominalizations ("performed an evaluation of" → "evaluated"), hedge-stacking, and redundancy.
 - Push engineering/method granularity to a real supplement, or cut it; the main text carries the clinical point.
 - A pure-deletion tracked edit that only trims is often the highest-value one. **Net word count should usually go down, not up.**
+- Trim wordiness, **not the thesis** — never delete the paper's top-level conceptual claim or the line that makes it land. Concision sharpens the point; it does not sand it flat (see *Center of gravity*).
 
 ### 3. Edit boldly, in the exemplars' voice
 
@@ -68,9 +71,9 @@ A full paper is **not** one big diagnostic pass — split it, polish by section,
 
 **Output 2 — Tracked-changes revised `.docx`** (edits applied in the manuscript itself). Rewrite **boldly, concisely, and in the exemplars' voice** (see *Core principles* above): recast whole sentences and openings, trim wordiness, aim for **net fewer words**. **Never fabricate** — every number in an edit must be lifted verbatim from somewhere in the manuscript; anything that needs a number or detail the source genuinely lacks (unreported event rates, CIs, blinded-read specifics) becomes a **comment**, not an invented insertion. Apply with the bundled `scripts/apply_tracked_changes.py` — it protects fields/cross-references and guarantees that rejecting all changes restores the original exactly.
 
-Pipeline (needs the `docx` skill's `unpack.py`/`pack.py`):
+Pipeline (needs the `docx` skill's `unpack.py`/`pack.py`; unpack with **`--merge-runs false`** so superscript citations and bold labels are not merged away):
 ```bash
-python <docx-skill>/scripts/office/unpack.py manuscript.docx unpacked/
+python <docx-skill>/scripts/office/unpack.py manuscript.docx unpacked/ --merge-runs false
 python <this-skill>/scripts/apply_tracked_changes.py unpacked/ edits.json --author "Claude"
 python <docx-skill>/scripts/office/pack.py unpacked/ manuscript_revised.docx --original manuscript.docx
 ```
@@ -80,7 +83,8 @@ Build `edits.json` from the findings — a list of `{"type":"replace","find":"�
 - A `find` must start AND end at a sentence or clause boundary, and must **include any leading connective the rewrite changes or drops** ("By contrast", "However", "Therefore"). Anchoring after the connective orphans it — e.g. find "contrast, MeVO…" → "By In the MeVO…".
 - A `replace` must be a **grammatically complete** unit that, substituted in place (prefix + replace + suffix), yields a clean, complete sentence — no dropped verbs, no comma-splices ("…cross-validation, combined-model discrimination was AUC…" is broken; keep the verb: "…left discrimination essentially unchanged (…)").
 - `insert_after` text must not glue to the anchor — never anchor immediately after a citation superscript, and keep a separating space (the script auto-spaces, but check), e.g. avoid "neuroscience.30-31These findings…".
-- **Verification MUST include a seam/grammar pass, not just number-checking:** for every edit, substitute it into the surrounding text and confirm the whole sentence is grammatical and the joins read cleanly; reject or repair otherwise.
+- **A `find` span must not swallow a specially-formatted run** — a superscript citation number, a bold "Figure 1." label — unless the `replace` reproduces that formatting, because the inserted text carries a single dominant format and would flatten them to plain. Anchor the edit to **end before a trailing citation superscript** (leaving it in the untouched suffix), or keep it a pure trim that does not cross it. (The apply script preserves original run formatting on kept and deleted text; this rule covers the *new* text it cannot infer.)
+- **Verification MUST include a seam/grammar pass, not just number-checking:** for every edit, substitute it into the surrounding text and confirm the whole sentence is grammatical and the joins read cleanly; also confirm no superscript citation or bold label was flattened. Reject or repair otherwise.
 
 **Output 3 — Chinese rationale `.docx` (《修改理由》)** — a reviewer-/supervisor-facing explainer of every edit. Write it in **pure Chinese**, two short lines per edit:
 > **改动**：用一句中文转述把什么改成了什么（不要贴英文整句）。

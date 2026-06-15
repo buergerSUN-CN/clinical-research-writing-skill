@@ -39,7 +39,8 @@ Copy this folder to `~/.claude/skills/clinical-research-writing/` (Claude Code) 
 Needs the bundled `docx` skill's `unpack.py` / `pack.py`:
 
 ```bash
-python <docx-skill>/scripts/office/unpack.py manuscript.docx unpacked/
+# --merge-runs false keeps each original run intact so superscript citations / bold labels survive
+python <docx-skill>/scripts/office/unpack.py manuscript.docx unpacked/ --merge-runs false
 python scripts/apply_tracked_changes.py unpacked/ edits.json --author "Claude"
 python <docx-skill>/scripts/office/pack.py unpacked/ manuscript_revised.docx --original manuscript.docx
 ```
