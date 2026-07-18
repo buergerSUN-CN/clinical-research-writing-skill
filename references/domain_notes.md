@@ -1,6 +1,6 @@
 # Domain Notes — Neurovascular/Stroke + Neuroimaging Vernacular
 
-Field-specific conventions for a neurovascular/stroke + neuroimaging clinical writer: scales + cut-offs, the statistics idiom this group actually uses, imaging/technique terms. General reporting-standard prose (STROBE/CONSORT/TRIPOD) and general academic-writing advice live elsewhere — see the academic-research-skills plugin.
+Field-specific conventions for a neurovascular/stroke + neuroimaging clinical writer: scales + cut-offs, the statistics idiom this group actually uses, imaging/technique terms. General reporting-standard prose (STROBE/CONSORT/TRIPOD) and general academic-writing advice live elsewhere — use `academic-research-suite` / `scientific-writing` in Codex or the equivalent academic-research skills in Claude Code when needed.
 
 ## Master rule {#master-rule}
 Every scale introduced ONCE with full name + abbreviation + numeric range + direction-of-meaning; every numeric cut-off carries a plain-language clinical LABEL; re-gloss each scale in every table/figure footnote (self-contained display items). Numbers never appear without bedside meaning ("NIHSS ≥6 = moderate-to-severe"; "mRS 0–2 = functional independence"; "mTICI 2b–3 = successful recanalization"). The cut-off travels with the number into row stubs.
@@ -56,12 +56,12 @@ Substance over checklist-citation; the journal's structured scaffold does the st
 
 ## Quick Grep Targets {#quick-grep}
 ```
-grep -n 'mRS 0–[123]\|functional independence\|excellent' domain_notes.md   # mRS dichotomy bands + labels
-grep -n 'mTICI\|eTICI\|2b\|recanalization\|reperfusion' domain_notes.md      # reperfusion cut-offs
-grep -n 'ASPECTS\|NIHSS\|BATMAN\|pc-' domain_notes.md                        # severity / early-ischemia scores
-grep -n 'Heidelberg\|sICH\|SITS-MOST\|ECASS\|HI1\|PH2\|Hunt–Hess\|Fisher' domain_notes.md  # hemorrhage adjudication
-grep -n 'NASCET\|WASID\|ISR\|stenosis\|residual\|TOAST' domain_notes.md      # stenosis / restenosis thresholds
-grep -n 'PSM\|IPTW\|DeLong\|VIF\|κ\|ICC\|Bland–Altman\|ROC\|AUC\|NNT' domain_notes.md  # statistics conventions
-grep -n 'CTP\|DWI-ASPECTS\|FVH\|FLAIR\|net water uptake\|NWU\|PCD-CTA\|Likert\|Tmax\|HIR\|GIC' domain_notes.md  # imaging terms
-grep -n 'STROBE\|CONSORT\|PRISMA\|STARD\|TRIPOD' domain_notes.md             # reporting-standard names (not prose)
+rg -n 'mRS 0–[123]|functional independence|excellent' domain_notes.md   # mRS dichotomy bands + labels
+rg -n 'mTICI|eTICI|2b|recanalization|reperfusion' domain_notes.md      # reperfusion cut-offs
+rg -n 'ASPECTS|NIHSS|BATMAN|pc-' domain_notes.md                        # severity / early-ischemia scores
+rg -n 'Heidelberg|sICH|SITS-MOST|ECASS|HI1|PH2|Hunt–Hess|Fisher' domain_notes.md  # hemorrhage adjudication
+rg -n 'NASCET|WASID|ISR|stenosis|residual|TOAST' domain_notes.md      # stenosis / restenosis thresholds
+rg -n 'PSM|IPTW|DeLong|VIF|κ|ICC|Bland–Altman|ROC|AUC|NNT' domain_notes.md  # statistics conventions
+rg -n 'CTP|DWI-ASPECTS|FVH|FLAIR|net water uptake|NWU|PCD-CTA|Likert|Tmax|HIR|GIC' domain_notes.md  # imaging terms
+rg -n 'STROBE|CONSORT|PRISMA|STARD|TRIPOD' domain_notes.md             # reporting-standard names (not prose)
 ```

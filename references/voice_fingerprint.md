@@ -3,7 +3,7 @@
 Measured by `scripts/metrics.py` over 32 hand-picked exemplars, split by genre:
 **A** = single-centre / observational / prognostic / procedural clinical (Nanjing neurovascular circle + some multicentre-observational), n=13 · **B** = imaging-biomarker / imaging-technique, n=7 · **C** = randomized-trial voice (RCT + post-hoc; NEJM/Lancet/JAMA/Radiology), n=12.
 
-**How to use.** Mount the row for your paper's genre. After drafting a section, run `python scripts/metrics.py` on it (or eyeball against these) and pull any metric outside the genre IQR back toward the median. These are *distributions with tolerances*, not single targets — hitting the median on every sentence is itself an AI tell (see `#burstiness`). The section-bound rules (`#hedging`, `#passive`) are load-bearing and appear again in `clinical_ai_tells.md`.
+**How to use.** Mount the row for your paper's genre. After drafting a section, run `python3 scripts/check_draft.py <draft.txt> --genre A` (or eyeball against these) and pull any metric outside the genre IQR back toward the median. These are *distributions with tolerances*, not single targets — hitting the median on every sentence is itself an AI tell (see `#burstiness`). The section-bound rules (`#hedging`, `#passive`) are load-bearing and appear again in `clinical_ai_tells.md`.
 
 ## Sentence rhythm & burstiness {#burstiness}
 | metric | A | B | C |
@@ -70,14 +70,14 @@ Per-1000-word medians. **Rare-to-zero and, as a *sentence-initial capitalized* c
 - **B (imaging):** most passive Methods, most "however", most semicolons, em-dash 0.
 - **C (RCT voice):** longest/densest/burstiest sentences, most long sentences, low Results hedging (~0.7, comparable to A — A is marginally lowest), practice-changing claims — use ONLY when writing/modelling a randomized trial, not a single-centre cohort.
 
-## Quick Grep Targets {#grep}
+## Quick Search Targets {#grep}
 ```
-grep -A6 "#burstiness"     references/voice_fingerprint.md    # sentence rhythm law
-grep -A5 "#hedging"        references/voice_fingerprint.md    # non-uniform hedging (Results vs Discussion)
-grep -A5 "#passive"        references/voice_fingerprint.md    # Methods-passive exemption
-grep -A4 "#numbers"        references/voice_fingerprint.md    # absolute-rate-first + CI
-grep -A6 "#connectives"    references/voice_fingerprint.md    # banned AI connectives + real ones
-grep -A6 "#punct"          references/voice_fingerprint.md    # em-dash ≈ 0
-grep -A5 "#genre-contrast" references/voice_fingerprint.md    # A vs B vs C
+rg -n -A6 "#burstiness"     references/voice_fingerprint.md    # sentence rhythm law
+rg -n -A5 "#hedging"        references/voice_fingerprint.md    # non-uniform hedging (Results vs Discussion)
+rg -n -A5 "#passive"        references/voice_fingerprint.md    # Methods-passive exemption
+rg -n -A4 "#numbers"        references/voice_fingerprint.md    # absolute-rate-first + CI
+rg -n -A6 "#connectives"    references/voice_fingerprint.md    # banned AI connectives + real ones
+rg -n -A6 "#punct"          references/voice_fingerprint.md    # em-dash ≈ 0
+rg -n -A5 "#genre-contrast" references/voice_fingerprint.md    # A vs B vs C
 ```
-Regenerate on a new corpus / a draft: `python scripts/metrics.py`.
+Rebuild the fingerprint from an exemplar workspace with `python3 scripts/metrics.py <workspace>`. Check a draft with `python3 scripts/check_draft.py <draft.txt> --genre A`.

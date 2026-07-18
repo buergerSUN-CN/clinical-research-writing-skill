@@ -1,0 +1,4 @@
+interface:
+  display_name: "Clinical Research Writing"
+  short_description: "Clinical voice, revision, and reporting audits"
+  default_prompt: "Use $clinical-research-writing to revise this clinical manuscript in a genre-matched, patient-centered voice without changing any source data or citations."

@@ -156,7 +156,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("unpacked")
     ap.add_argument("edits")
-    ap.add_argument("--author", default="Claude")
+    ap.add_argument("--author", default="Clinical Writing Assistant")
     ap.add_argument("--date", default="2026-06-15T00:00:00Z")
     args = ap.parse_args()
 

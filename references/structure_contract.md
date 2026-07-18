@@ -37,10 +37,10 @@ Not doable section-by-section; run once over the whole manuscript before deliver
 5. **Terminology.** One term per concept throughout (pick "futile recanalization" *or* "poor outcome despite reperfusion", not both interchangeably).
 6. **No dangling cross-references.** Don't cite a Supplementary Table/appendix/"data not shown" the manuscript doesn't contain.
 
-## Quick Grep Targets {#grep}
+## Quick Search Targets {#grep}
 ```
-grep -A6  "#classify"       references/structure_contract.md   # study_type x genre routing
-grep -A12 "#skeleton"       references/structure_contract.md   # IMRaD spine + move slugs
-grep -A12 "#claim-gradient" references/structure_contract.md   # how strongly to claim, by genre
-grep -A10 "#cross-section"  references/structure_contract.md   # mandatory whole-manuscript pass
+rg -n -A6  "#classify"       references/structure_contract.md   # study_type x genre routing
+rg -n -A12 "#skeleton"       references/structure_contract.md   # IMRaD spine + move slugs
+rg -n -A12 "#claim-gradient" references/structure_contract.md   # how strongly to claim, by genre
+rg -n -A10 "#cross-section"  references/structure_contract.md   # mandatory whole-manuscript pass
 ```

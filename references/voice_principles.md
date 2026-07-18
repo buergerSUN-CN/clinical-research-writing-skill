@@ -576,13 +576,13 @@ Scope tags: **INVARIANT** = holds across the marked genres (a MUST); **VARIANT**
 **Anti-repetition.** This is genre-weighted: apply NNT/pp framing freely in C, sparingly and only when the study reports an absolute contrast in A, essentially never in pure B marker papers. Do NOT deploy 'nearly one in X patients' as a rhetorical opener — the old phrasebank's tell. When a natural-frequency phrase is used, it must carry the real paired numbers and, ideally, a benchmark for scale, not stand alone as emphasis. CRITIC-GUARD: the 'N of every 10' / natural-frequency phrase is licensed ONLY carrying the study's real paired arm counts AND a benchmark/NNT in the same sentence (paper20/22). A bare 'about N of every 10 patients' with no paired denominator is grammatically identical to the banned 'nearly one in five' AI tell — see clinical_ai_tells.md #tells.
 
 
-## Quick Grep Targets {#grep}
+## Quick Search Targets {#grep}
 ```
-grep -A40 "#title-abstract" references/voice_principles.md   # all title-abstract moves
-grep -A40 "#introduction" references/voice_principles.md   # all introduction moves
-grep -A40 "#methods" references/voice_principles.md   # all methods moves
-grep -A40 "#results" references/voice_principles.md   # all results moves
-grep -A40 "#discussion" references/voice_principles.md   # all discussion moves
+rg -n -A40 "#title-abstract" references/voice_principles.md   # all title-abstract moves
+rg -n -A40 "#introduction" references/voice_principles.md   # all introduction moves
+rg -n -A40 "#methods" references/voice_principles.md   # all methods moves
+rg -n -A40 "#results" references/voice_principles.md   # all results moves
+rg -n -A40 "#discussion" references/voice_principles.md   # all discussion moves
 # jump to one move:
-grep -A8 "#results-abs-rate" references/voice_principles.md   # (use any move slug)
+rg -n -A8 "#results-abs-rate" references/voice_principles.md   # (use any move slug)
 ```

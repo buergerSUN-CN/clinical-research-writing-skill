@@ -271,11 +271,11 @@ audit against TRIPOD Type 3/4 entries instead.
 | rct | CONSORT | — |
 | rct-posthoc | CONSORT (partial) | STROBE (observational analysis arm) |
 
-## Quick Grep Targets {#grep}
+## Quick Search Targets {#grep}
 ```
-grep -A30 "#strobe"    references/reporting_checklists.md   # full STROBE
-grep -A30 "#consort"   references/reporting_checklists.md   # full CONSORT
-grep -A30 "#stard"     references/reporting_checklists.md   # full STARD
-grep -A30 "#tripod"    references/reporting_checklists.md   # full TRIPOD
-grep -A10 "#mapping"   references/reporting_checklists.md   # study_type→checklist
+rg -n -A30 "#strobe"    references/reporting_checklists.md   # full STROBE
+rg -n -A30 "#consort"   references/reporting_checklists.md   # full CONSORT
+rg -n -A30 "#stard"     references/reporting_checklists.md   # full STARD
+rg -n -A30 "#tripod"    references/reporting_checklists.md   # full TRIPOD
+rg -n -A10 "#mapping"   references/reporting_checklists.md   # study_type→checklist
 ```
