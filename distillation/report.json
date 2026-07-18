@@ -1,0 +1,37 @@
+{
+  "skill": "clinical-research-writing",
+  "release": "2.0.0",
+  "corpus": {
+    "papers": 32,
+    "observational_or_procedural": 13,
+    "diagnostic_or_imaging": 7,
+    "trial_or_trial_secondary": 12
+  },
+  "artifacts": {
+    "metadata": 32,
+    "paper_metrics": 32,
+    "genre_metrics": 3,
+    "section_pattern_sets": 5,
+    "cognition_profiles": 3,
+    "private_validation_artifacts": 7
+  },
+  "v2_forward_test": {
+    "families": ["observational", "diagnostic-imaging", "trial-secondary"],
+    "fresh_agents": 3,
+    "source_mode": "title and abstract/head only",
+    "invented_numbers": 0,
+    "semantic_label_errors_after_iteration": 0,
+    "result": "pass"
+  },
+  "publication_policy": {
+    "raw_corpus_public": false,
+    "long_verbatim_exemplars_public": false,
+    "local_paths_public": false
+  },
+  "scope": "General clinical-writing core with an optional neurovascular/stroke profile",
+  "limitations": [
+    "The measured numeric fingerprint is specialty-specific.",
+    "General clinical rules are reasoning constraints, not a validated universal style distribution.",
+    "The public repository excludes source texts and private audit artifacts."
+  ]
+}

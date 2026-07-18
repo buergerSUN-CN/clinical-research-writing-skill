@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Clinical paper distillation metadata",
+  "type": "object",
+  "required": ["id", "genre", "study_type", "primary_endpoint", "claim_gradient"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^paper[0-9]+$"},
+    "genre": {"enum": ["A", "B", "C"]},
+    "study_type": {"type": "string"},
+    "specialty_profile": {"type": "string"},
+    "primary_endpoint": {"type": "string"},
+    "claim_gradient": {"enum": ["descriptive", "associational", "moderate", "practice-changing"]},
+    "journal": {"type": "string"},
+    "year": {"type": ["string", "integer"]},
+    "design": {"type": "string"},
+    "centers": {"type": "string"}
+  },
+  "additionalProperties": true
+}

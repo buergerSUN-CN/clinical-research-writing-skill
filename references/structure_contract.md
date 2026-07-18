@@ -1,46 +1,38 @@
-# Structure contract — skeleton, claim-gradient, coherence
+# Whole-manuscript structure contract
 
-Higher-altitude companion to `voice_principles.md` (which gives per-move phrasing). This file says **what goes where, how strongly to claim it, and how to keep the paper coherent**. Grep the anchor you need; never load whole.
+## Classify {#classify}
 
-## Step 0 — classify before writing {#classify}
-Fix two axes, because the rules branch on both:
-1. **study_type** — `interventional-cohort` · `prognostic-predictor` · `diagnostic-accuracy` · `imaging-technique` · `procedural-comparative` · `rct` · `rct-posthoc`. (Don't force ROC/AUC onto a binary diagnostic read, or an adjusted OR onto a procedural comparison.)
-2. **genre** — **A** clinical-observational · **B** imaging-biomarker/technique · **C** randomized-trial voice. Mount that genre's row in `voice_fingerprint.md` and its VARIANT moves in `voice_principles.md`.
+Record `study_family`, optional specialty `profile`, target journal, primary question, primary endpoint,
+top-level claim, and reporting standard before editing.
 
-Single-centre observational → A. Imaging marker/technique is the star → B. Randomized trial or its post-hoc → C. See `voice_fingerprint.md #genre-contrast`.
+## Skeleton {#skeleton}
 
-## Section skeleton {#skeleton}
-IMRaD order is INVARIANT across A/B/C; the moves below are the spine (slugs → `voice_principles.md`). VARIANT items note the genre.
+| Unit | Required job |
+|---|---|
+| Title | Name clinical object, population, and evidence level when material |
+| Abstract | Reconstruct question, design, cohort, principal numbers, harms, and calibrated answer |
+| Introduction | Clinical state → unresolved decision → exact aim |
+| Methods | Cohort/design → measurements/intervention → endpoints → analysis |
+| Results | Flow → primary result → supporting analyses → harms/sensitivity |
+| Discussion | Principal findings → evidence comparison → explanation → clinical meaning → limitations |
+| Conclusion | Answer the aim without exceeding the Discussion claim |
 
-- **Title** → `#title-endpoint-population-design-subtitle` (+ A/B `#title-predictor-first-noun-phrase`). Endpoint/predictor/comparison + population; design subtitle after a colon (A/C almost always; C appends the trial name).
-- **Abstract** → journal-labeled structure `#abstract-structured-labels-match-journal`; open Results comparatively, define outcomes inline, conclusion restates direction in words.
-- **Introduction** (funnel): cited-epidemiology opener `#opener-hard-cited-epidemiology` → (C/B) residual-burden-despite-treatment → named prior actors + **specific** gap `#gap-hard-specific-negation` → aim anchored to the named cohort `#aim-anchored-to-named-cohort`. Aim verb form is a per-paper VARIANT (`#aim-form-genre-divergence`), not a genre law.
-- **Methods**: cohort provenance in one breath `#cohort-provenance-one-breath` → terse IRB/consent → numbered inclusion/exclusion with clinical thresholds → endpoints named-classification + inline gloss `#endpoints-named-classification-with-inline-gloss` → blinded adjudication + reader-experience hierarchy → stats distribution-first. VARIANT: C stacks a trial-design adjective string; B bursts imaging parameters in parentheses. **Methods is passive on purpose** (`voice_fingerprint.md #passive`).
-- **Results** (facts only, no editorial): enrollment/flow first (do NOT lead a sentence with the bare rate) → count-then-percent-with-denominator → central tendency + dispersion → adjusted effect + 95% CI + exact P in one parenthetical → flat non-significance (no "trend toward") → ordering context→contrast→adjusted. VARIANT: A predictor currency (independent OR/HR); B accuracy/agreement (AUC, κ, cut-off); C arm-contrast effect hierarchy (primary → secondary → safety).
-- **Discussion** (interpretation): restate own finding first → benchmark **named** prior series/RCTs → explicit management paragraph (A/C) or utility-of-marker framing (B) → mechanism subordinate & hedged (A/C) / central & detailed (B) → limitations with named bias + **direction** → call for external/prospective validation → pragmatic hedged conclusion. Quantify effect in patient terms (C: NNT/absolute pp; A: occasional high-vs-low-risk %).
+## Claim gradient {#claim-gradient}
 
-## Claim-gradient — how strongly to claim {#claim-gradient}
-Calibrate the top-line to the design; keep it monotonic (Abstract ≈ Conclusion, never escalating).
-- **A (observational):** hypothesis-generating. Verbs: "associated with", "independent predictor of", "may favor". A single-centre retrospective cohort is **never** "practice-changing". Findings are associations, not causes; name the adjusting model.
-- **B (imaging):** hypothesis-generating, openly hedged ("might/may/could"). State a modest AUC (0.68–0.76) honestly — no "excellent/robust". Frame the marker as a **surrogate** with comparable performance to a harder reference, pitched on workflow (not novelty).
-- **C (RCT), bimodal by result:**
-  - *Positive primary outcome* → state it **flatly and strongly**, first Discussion sentence, no hedge ("EVT led to better functional outcomes than medical management"). Translate to NNT / absolute percentage-point difference **benchmarked** to an external anchor.
-  - *Null / non-inferiority-not-shown* → **reframe** to a decision/guideline message or a design lesson ("thrombolysis should not delay endovascular treatment"), never "endpoint not met but valuable insights".
-  - Post-hoc/subgroup → label exploratory, "not for definitive hypothesis testing", note no multiplicity correction.
+Require monotonic restraint: title ≤ abstract conclusion ≤ discussion interpretation ≤ what design and
+analysis support. A secondary analysis never inherits the parent trial's full claim strength by default.
 
-## Cross-section consistency pass — MANDATORY {#cross-section}
-Not doable section-by-section; run once over the whole manuscript before delivery.
-1. **Golden thread.** The aim (end of Intro) → primary endpoint (Methods) → lead Results number → Conclusion answer are the *same question*, in the same terms. No orphan aim, no conclusion the Results don't support.
-2. **Numeric reconciliation.** Every number in Abstract = Results = Tables = figure legends (n, %, OR/HR, CI, P). No drift.
-3. **Methods↔Results fidelity.** Every metric reported (Results/Tables/legends) is defined in Methods; every method with a numeric output appears in Results. Don't trim a method whose output is reported (e.g. don't drop "Jacobian volume preservation" from Methods while Results reports the Jacobian error).
-4. **Claim-gradient monotonic.** Conclusion strength ≤ what the design licenses (see `#claim-gradient`); Abstract conclusion == Discussion conclusion.
-5. **Terminology.** One term per concept throughout (pick "futile recanalization" *or* "poor outcome despite reperfusion", not both interchangeably).
-6. **No dangling cross-references.** Don't cite a Supplementary Table/appendix/"data not shown" the manuscript doesn't contain.
+## Cross-section pass {#cross-section}
 
-## Quick Search Targets {#grep}
-```
-rg -n -A6  "#classify"       references/structure_contract.md   # study_type x genre routing
-rg -n -A12 "#skeleton"       references/structure_contract.md   # IMRaD spine + move slugs
-rg -n -A12 "#claim-gradient" references/structure_contract.md   # how strongly to claim, by genre
-rg -n -A10 "#cross-section"  references/structure_contract.md   # mandatory whole-manuscript pass
-```
+Verify all of the following before delivery:
+
+1. The Introduction aim, Methods endpoint, Results hierarchy, and Conclusion answer the same question.
+2. Sample sizes, group counts, event counts, percentages, time points, estimates, intervals, and P values
+   reconcile across abstract, text, tables, figures, and supplement.
+3. Every reported analysis has a method; every promised method has a result or an explicit reason.
+4. Terminology, abbreviations, group names, endpoint labels, and reference categories remain stable.
+5. Causal, diagnostic, prognostic, and practice claims stay within the selected study family.
+6. All table, figure, registry, appendix, and supplement references point to existing items.
+7. The conclusion retains material safety findings and limitations relevant to its claim.
+
+Record unresolved discrepancies as author queries; never silently choose a value.

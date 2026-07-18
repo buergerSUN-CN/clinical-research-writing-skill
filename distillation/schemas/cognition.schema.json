@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Clinical writing cognition profile",
+  "type": "object",
+  "required": ["genre", "recurring_propositions", "claim_gradient_habit", "signature_moves"],
+  "properties": {
+    "genre": {"enum": ["A", "B", "C"]},
+    "recurring_propositions": {"type": "array", "items": {"type": "string"}},
+    "claim_gradient_habit": {"type": "string"},
+    "signature_moves": {"type": "array", "items": {"type": "string"}},
+    "avoid": {"type": "array", "items": {"type": "string"}}
+  },
+  "additionalProperties": true
+}

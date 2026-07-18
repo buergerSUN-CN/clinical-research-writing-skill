@@ -2,3 +2,14 @@ __pycache__/
 *.pyc
 .DS_Store
 references/_archive/
+_corpus/
+_meta/
+_metrics/
+_analysis/
+_validation/
+_output/
+.redistill-state.json
+*.pdf
+*.doc
+*.docx
+*.epub
