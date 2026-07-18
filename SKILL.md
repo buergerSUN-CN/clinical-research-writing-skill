@@ -34,6 +34,7 @@ These files are large and grep-indexed (`{#anchor}` + Quick Grep Targets in each
 | `references/clinical_ai_tells.md` | banned AI patterns + humanizer wrap/exemptions | the de-AI post-draft pass |
 | `references/domain_notes.md` | mRS/ASPECTS/TICI/κ… field vocabulary & cut-offs | need a scale/stat/reporting convention |
 | `references/display_items.md` | self-contained figure legends / table footnotes | writing any display item |
+| `references/reporting_checklists.md` | STROBE / CONSORT / STARD / TRIPOD items, per-item, grep-indexed | Mode D checklist audit |
 
 **Defer (don't re-implement):** general IMRaD structure, hedging taxonomy, tense, paragraph craft → `academic-research-skills` plugin (`academic_writing_style.md`, `paper_structure_patterns.md`) and the `scientific-writing` skill. Word-level de-AI → `humanizer_academic` (English) / `humanizer-zh-academic` (Chinese). Final Word formatting → `submission-format`. Citation checks → `citecheck`. This skill only adds the clinical + group-voice + anti-AI delta.
 
@@ -59,6 +60,13 @@ A full paper is NOT one diagnostic pass — split, polish per section, reassembl
 5. **Cross-section consistency pass (MANDATORY)** — `structure_contract.md #cross-section`: golden thread aim→conclusion, numeric reconciliation, Methods↔Results fidelity, claim-gradient monotonic, terminology, no dangling supplement refs. Cannot be done section-by-section.
 6. **Deliver** (usually Output 2 + 3 together).
 
+### Mode D — checklist audit
+For any draft (or a finished manuscript), audit it against the applicable reporting standard. Run this **before** Mode C polish, or as a standalone pre-submission check.
+1. From Step 0's study_type, find the checklist(s) via `references/reporting_checklists.md #mapping`.
+2. `grep` the checklist section(s) (e.g. `grep -A30 "#strobe" references/reporting_checklists.md`).
+3. Go item by item. For each: search the draft for the required content. Mark it **✅ reported** (cite where), **⚠️ partial** (what's missing), **❌ missing** (severity: ■high / ■medium / ■low), or **N/A**.
+4. Deliver a gap report: (a) summary line — total/passed/partial/missing/N/A; (b) pass items in one compact block ("Items 1a, 1b, 2, 3…: ✅"); (c) every missing/partial item called out with its severity, the draft location that should hold it, and a one-line fix (what to add, or whether to state as a limitation). No vague "consider adding X" — say what's absent and what to write into which section.
+
 ## The per-section loop {#loop}
 For each section: **classify → grep moves+fingerprint → draft/rewrite → self-check → (whole paper) cross-section pass.** Example (Results, genre A):
 ```
@@ -67,7 +75,7 @@ grep -A5  "#hedging"          references/voice_fingerprint.md   # Results ≈ 0 
 grep -A4  "#numbers"          references/voice_fingerprint.md   # n/N (%) + CI
 grep -A15 "#tells"            references/clinical_ai_tells.md
 ```
-Then, to check a draft objectively: `python scripts/metrics.py` (point it at the draft) and pull outliers back toward the genre IQR.
+Then, to check a draft objectively: `python scripts/metrics.py` (point it at the draft) and pull outliers back toward the genre IQR. For a checklist audit, see Mode D above and grep the relevant checklist from `references/reporting_checklists.md`.
 
 ## Anti-AI — run these passes in order {#anti-ai}
 1. Clinical reframing + genre voice (this skill: `voice_principles` + `structure_contract`).
