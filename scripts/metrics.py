@@ -8,20 +8,21 @@ Discussion high), connective spectrum, opener habits, absolute-rate-first
 frequency, passive:active by section, statistic density, punctuation ratios.
 
 Usage:
-    python3 metrics.py                # all papers in _corpus/, group by _meta genre
+    python3 metrics.py <workspace>    # reads <workspace>/_corpus and _meta
 Outputs:
-    _metrics/paperNN.json             # per paper
-    _metrics/genre_{A,B,C}.json       # per-genre median/IQR
-    _metrics/fingerprint_summary.md   # human-readable draft (feeds voice_fingerprint.md)
+    <workspace>/_metrics/paperNN.json             # per paper
+    <workspace>/_metrics/genre_{A,B,C}.json       # per-genre median/IQR
+    <workspace>/_metrics/fingerprint_summary.md   # human-readable draft
 """
 from __future__ import annotations
 
+import argparse
 import json
 import re
 import statistics as st
 from pathlib import Path
 
-WS = Path("/Volumes/工作数据/claude-projects/AIS_clinical/_skill_build/redistill")
+WS = Path.cwd()
 CORPUS, META, METRICS = WS / "_corpus", WS / "_meta", WS / "_metrics"
 
 # ---------------------------------------------------------------- lexicons
@@ -297,6 +298,16 @@ def fmt(x):
 
 
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("workspace", type=Path, help="directory containing _corpus/ and _meta/")
+    args = parser.parse_args()
+
+    global WS, CORPUS, META, METRICS
+    WS = args.workspace.expanduser().resolve()
+    CORPUS, META, METRICS = WS / "_corpus", WS / "_meta", WS / "_metrics"
+    if not CORPUS.is_dir() or not META.is_dir():
+        parser.error(f"workspace must contain _corpus/ and _meta/: {WS}")
+
     METRICS.mkdir(parents=True, exist_ok=True)
     per_paper = []
     for f in sorted(CORPUS.glob("paper*.txt"), key=lambda x: int(re.findall(r"\d+", x.stem)[0])):

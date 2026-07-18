@@ -1,6 +1,6 @@
 # Clinical AI-tells — make it read human, not machine
 
-Reverse-inferred from the 32-exemplar corpus: **what real papers in this voice do that an AI writer flattens**, plus a banned-pattern checklist, plus how to run `humanizer_academic` without breaking clinical convention. Run this as a **post-draft pass** (see order at bottom). Numeric targets live in `voice_fingerprint.md`; phrasing principles in `voice_principles.md`.
+Reverse-inferred from the 32-exemplar corpus: **what real papers in this voice do that an AI writer flattens**, plus a banned-pattern checklist, plus how to run the host's academic humanizer without breaking clinical convention. Run this as a **post-draft pass** (see order at bottom). Numeric targets live in `voice_fingerprint.md`; phrasing principles in `voice_principles.md`.
 
 ## (A) Positive signals real papers have and AI drops {#positive}
 - **Burstiness.** Sentence length varies hard (SD ≈ **1.3–1.5× the mean**; short ≤15 words ~25% in A/B, ~30% in C). AI writes uniform 20–24-word sentences. → after a long explanatory sentence, land a short *substantive* declarative — NOT an aphorism (see `#llm-signatures`). (`voice_fingerprint.md #burstiness`)
@@ -36,8 +36,8 @@ These survived a first-pass contract-guided rewrite and were caught by a blind j
 - **Native-fluent over-smoothing.** Erasing every seam into uniform polish. The exemplars have honest roughness and terse domain phrasing. → don't sand the draft into frictionless prose; preserve the author's specific, slightly-uneven constructions.
 - **Numbers placed where the source didn't have them.** Do not move summary statistics (AUC, NPV, specificity) into a section the source didn't, or invent an editorial angle (an "NPV story") the data don't foreground. Report what the manuscript reports, where it reports it.
 
-## (C) Running humanizer_academic without breaking clinical convention {#humanizer}
-`humanizer_academic` (`~/.claude/skills/humanizer_academic/`) owns the word-level AI-tell cleanup (26 patterns). Reuse it as a pass, but **override these where it conflicts with clinical register**:
+## (C) Running the academic humanizer without breaking clinical convention {#humanizer}
+Use `humanizer-academic` in Codex or `humanizer_academic` in Claude Code for English word-level AI-tell cleanup. Reuse it as a pass, but **override these where it conflicts with clinical register**:
 
 | humanizer rule | conflict | clinical override |
 |---|---|---|
@@ -48,16 +48,16 @@ These survived a first-pass contract-guided rewrite and were caught by a blind j
 
 **Order of passes (put in SKILL.md workflow):**
 1. Clinical reframing + genre voice (this skill: `voice_principles` + `structure_contract`).
-2. **This file's self-check** (A/B) + fingerprint compare (`python scripts/metrics.py` on the draft).
-3. `humanizer_academic` (word-level), with the overrides above.
+2. **This file's self-check** (A/B) + fingerprint compare (`python3 scripts/check_draft.py <draft.txt> --genre A`).
+3. The host's academic humanizer (word-level), with the overrides above.
 4. Language/journal polish (e.g. a `nature-polishing`-type pass) — last.
 
 **Chinese output** (中文摘要 or 《修改理由》): route Chinese-language AI-smoothing to `humanizer-zh-academic`; this file is English-tuned.
 
-## Quick Grep Targets {#grep}
+## Quick Search Targets {#grep}
 ```
-grep -A10 "#positive"       references/clinical_ai_tells.md   # what to preserve
-grep -A15 "#tells"          references/clinical_ai_tells.md   # banned patterns
-grep -A10 "#llm-signatures" references/clinical_ai_tells.md   # the "too-polished" tells
-grep -A8  "#humanizer"      references/clinical_ai_tells.md   # humanizer exemptions + pass order
+rg -n -A10 "#positive"       references/clinical_ai_tells.md   # what to preserve
+rg -n -A15 "#tells"          references/clinical_ai_tells.md   # banned patterns
+rg -n -A10 "#llm-signatures" references/clinical_ai_tells.md   # the "too-polished" tells
+rg -n -A8  "#humanizer"      references/clinical_ai_tells.md   # humanizer exemptions + pass order
 ```

@@ -89,15 +89,15 @@ Every display item, read in isolation, must name four things: the **endpoint + i
 ## Project calibration {#calibration}
 Prefer SHORTER, concept-focused legends/footnotes with confident main text. Borrow the decision-relevant elements (endpoint definition, cut-off, named classification, direction anchors, adjustment intent, population tag) but NOT the Lancet-IPD defensive per-cell density (full adjustment set + p-sidedness + per-cell missingness + collinearity exclusions in every legend). Emulate the patient-facing self-contained item over exhaustive per-cell statistical disclosure where a choice must be made.
 
-## Quick Grep Targets {#grep}
+## Quick Search Targets {#grep}
 ```
-grep -A4  "#contract"   references/display_items.md   # the 4-thing self-containment rule
-grep -A9  "#legends"    references/display_items.md   # general figure-legend moves
-grep -A5  "#null-flag"  references/display_items.md   # pair positive with explicit null
-grep -A4  "#forest"     references/display_items.md   # direction anchors + adjustment set + guardrail
-grep -A3  "#roc"        references/display_items.md   # AUC + cut-off + Se/Sp decision rule
-grep -A5  "#case"       references/display_items.md   # representative-case template, close on mRS
-grep -A11 "#footnotes"  references/display_items.md   # 3-part footnote scaffold
-grep -A4  "#flow"       references/display_items.md   # where CONSORT/STROBE exclusions go
-grep -A4  "#titles"     references/display_items.md   # title names endpoint+population, not the stat
+rg -n -A4  "#contract"   references/display_items.md   # the 4-thing self-containment rule
+rg -n -A9  "#legends"    references/display_items.md   # general figure-legend moves
+rg -n -A5  "#null-flag"  references/display_items.md   # pair positive with explicit null
+rg -n -A4  "#forest"     references/display_items.md   # direction anchors + adjustment set + guardrail
+rg -n -A3  "#roc"        references/display_items.md   # AUC + cut-off + Se/Sp decision rule
+rg -n -A5  "#case"       references/display_items.md   # representative-case template, close on mRS
+rg -n -A11 "#footnotes"  references/display_items.md   # 3-part footnote scaffold
+rg -n -A4  "#flow"       references/display_items.md   # where CONSORT/STROBE exclusions go
+rg -n -A4  "#titles"     references/display_items.md   # title names endpoint+population, not the stat
 ```
