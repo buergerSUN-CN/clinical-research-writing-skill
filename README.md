@@ -2,45 +2,51 @@
 
 # clinical-research-writing
 
-A Claude Code skill that makes clinical research manuscripts read as **genuine clinical research** written in a real group's voice — not basic science, and not AI.
+A Claude Code skill for writing clinical research papers that sound like they came from a real research group — not a basic-science lab, and not an LLM.
 
-Distilled per-genre from **32 hand-picked exemplars** (neurovascular/stroke + neuroimaging, NEJM/Lancet/JAMA RCTs), using a hybrid pipeline: quantitative linguistic fingerprinting (sentence burstiness, section-bound hedging, connective spectrum) + per-section deep-read pattern extraction with adversarial validation and leave-one-out blind judging.
+Built from **32 hand-picked exemplar papers** across three genres: single-centre observational & diagnostic-accuracy studies (neurovascular/stroke, Nanjing group), imaging-biomarker studies, and landmark multicentre RCTs (NEJM / Lancet / JAMA). The distillation pipeline is hybrid: quantitative linguistic fingerprinting first, then per-section deep-read pattern extraction, then adversarial validation and leave-one-out blind judging.
 
-## What it does
+## Four modes
 
-- **Mode A** — diagnose & rewrite a section. Identifies specific sentences that read basic-science/templated/AI; quotes the offender; shows a clinical rewrite. Checks against a measured genre fingerprint.
-- **Mode B** — draft a section from scratch in the target genre's voice.
-- **Mode C** — polish a whole manuscript. Classify → split into sections → triage → per-section rewrite (parallelizable) → mandatory cross-section "golden-thread" consistency pass → deliverables:
-  - **Output 1** — Markdown revision report (findings table, severity, suggested rewrites)
-  - **Output 2** — Tracked-changes revised `.docx` (edits applied; rejecting all changes restores the original exactly)
-  - **Output 3** — Chinese 《修改理由》 `.docx` (pure Chinese, two-line-per-edit explanation for supervisors/reviewers)
+| Mode | What | When |
+|---|---|---|
+| **A — Diagnose & rewrite** | Quote the offending sentence, name what's wrong (basic-science framing / template / AI-tell), show a clinical rewrite. Cross-checks against a measured genre fingerprint. | Most common. Polishing a section or paragraph. |
+| **B — Draft from scratch** | Write a section _de novo_ in the target genre's voice, given the study design and key numbers. | When a section hasn't been written yet. |
+| **C — Whole-manuscript polish** | Classify → split into IMRaD units → triage → per-section rewrite (parallelisable) → mandatory cross-section coherence pass → three deliverables. | A full paper, pre-submission. |
+| **D — Checklist audit** | Map the study to the right reporting standard (STROBE / CONSORT / STARD / TRIPOD), audit item-by-item (✅ reported / ⚠️ partial / ❌ missing / N/A), produce a gap report with severity and one-line fixes. | Pre-submission check. Catch the items reviewers will flag. |
 
-## How it's different from generic clinical-writing advice
+### Mode C deliverables
+1. **Markdown revision report** — what, where, how severe, suggested rewrite.
+2. **Tracked-changes `.docx`** — every edit applied; rejecting all changes restores the original exactly.
+3. **Chinese 《修改理由》 `.docx`** — two lines per edit in pure Chinese: what changed and why (for supervisors and reviewers).
 
-1. **Quantitative voice fingerprint** — measured targets per genre (A observational · B imaging · C RCT): sentence burstiness (SD ≈ 1.3–1.5× mean), section-bound hedging (Results ≈ 0, Discussion ≈ 8–11 /1000), Methods-passive exemption (55–72%), em-dash ≈ 0, banned connectives. `scripts/metrics.py` computes these; `scripts/check_draft.py` checks a draft against them.
+## What makes this different
 
-2. **Anti-template principles, not phrase banks** — 39 sourced moves (Title → Conclusion). Every move is a *principle + verbatim Correct exemplar (paperNN-verified) + AI Incorrect counter-example + anti-repetition note*. No fill-in-the-blank frames — the old skill's phrase-bank taught templating ("Nearly one in five patients experienced X"); the new skill kills it.
+**It's measured, not intuited.** `scripts/metrics.py` computes a per-genre voice fingerprint against the exemplar corpus — sentence burstiness (SD ≈ 1.3–1.5× mean), section-bound hedging density (Results ≈ 0, Discussion ≈ 8–11 per 1000 words), passive-voice ratios by section (Methods: 55–72% — correct, don't touch), connective spectra, em-dash frequency (~0 in this group). `scripts/check_draft.py` checks a draft against these targets in one line.
 
-3. **Corpus-derived AI-tell layer** — hard anti-AI signals reverse-inferred from the exemplars (uniform hedging, AI connectives, "significant clinical implications" filler, fake-fraction flourish) plus LLM-signature tells caught by leave-one-out blind judging (aphoristic closers, manufactured symmetry, too-perfect limitations, thinned specificity).
+**It teaches principles, not frames.** The old phrase-bank taught fill-in-the-blank templates — "Nearly one in five patients experienced X" was the canonical output. The new skill gives 39 sourced moves (Title → Conclusion), each a *principle + verbatim Correct exemplar (grep-verified against the source paper) + AI Incorrect counter-example + anti-repetition constraint*. Lift the reasoning, never paste a frame.
 
-4. **Deferral, not duplication** — general IMRaD structure / hedging taxonomy / reporting standards (CONSORT, STROBE, TRIPOD) are delegated to the `academic-research-skills` plugin and `scientific-writing` skill. Word-level de-AI delegates to `humanizer_academic` (with clinical exemptions for Methods-passive, em-dash thresholds, section-bound hedging). This skill adds only the clinical + genre-voice + anti-AI delta.
+**The anti-AI layer is corpus-derived, not guessed.** Hard signals: uniform hedging, AI connectives (*Moreover / Additionally / Notably* — near-zero in the exemplars), vacuous "significant clinical implications" closers, fake-fraction flourishes, over-smoothing that sands away the honest roughness of real ESL-authored papers. Soft signals caught by blind leave-one-out judging: aphoristic paragraph closers ("The novelty is elsewhere."), manufactured symmetry, too-perfect enumerated limitations, thinned number-density. All catalogued in `clinical_ai_tells.md`.
+
+**It defers, it doesn't duplicate.** General IMRaD structure, hedging taxonomies, tense conventions, CONSORT/STROBE/TRIPOD boilerplate → `academic-research-skills` plugin and `scientific-writing` skill. Word-level de-AI → `humanizer_academic` (with clinical exemptions: Methods passive stays, em-dash is a threshold not a ban, hedging is section-bound). This skill only adds the clinical + genre-voice + anti-AI delta.
 
 ## Layout
 
 ```
-SKILL.md                      # router, genre classify, Modes A/B/C, grep loop, anti-AI order, defer map
+SKILL.md                          # router, genre classify, four modes, grep loop, anti-AI order
 references/
-  voice_fingerprint.md        # A/B/C numeric targets + anti-AI laws (grep-indexed)
-  voice_principles.md         # 39 anti-template section moves, sourced, Correct/Incorrect
-  structure_contract.md       # genre skeleton, claim-gradient, mandatory cross-section pass
-  clinical_ai_tells.md        # corpus-derived AI-tell checklist + humanizer exemptions
-  domain_notes.md             # mRS/ASPECTS/TICI/κ… field vocabulary (slim, only what's used)
-  display_items.md            # self-contained figure legends / table footnotes
+  voice_fingerprint.md            # A/B/C numeric targets + anti-AI laws
+  voice_principles.md             # 39 anti-template moves, sourced, Correct/Incorrect
+  structure_contract.md           # genre skeleton, claim-gradient, mandatory cross-section pass
+  clinical_ai_tells.md            # corpus-derived AI-tell checklist + humanizer exemptions
+  reporting_checklists.md         # STROBE / CONSORT / STARD / TRIPOD, per-item, grep-indexed
+  domain_notes.md                 # mRS / ASPECTS / TICI / κ… field vocabulary
+  display_items.md                # self-contained figure legends / table footnotes
 scripts/
-  apply_tracked_changes.py    # ← preserved from v1
-  build_rationale_docx.py     # ← preserved from v1
-  metrics.py                  # compute the quantitative fingerprint
-  check_draft.py              # one-line draft check: python scripts/check_draft.py draft.txt --genre A
+  apply_tracked_changes.py        # apply edits.json as Word tracked changes
+  build_rationale_docx.py         # format Chinese 《修改理由》 into Word
+  metrics.py                      # compute the quantitative fingerprint
+  check_draft.py                  # one-line draft check against genre targets
 ```
 
 ## Install
@@ -50,23 +56,27 @@ git clone https://github.com/buergerSUN-CN/clinical-research-writing-skill.git \
   ~/.claude/skills/clinical-research-writing
 ```
 
-## Tracked-changes pipeline (Mode C, Output 2)
+## Quick start
 
-Requires the bundled `docx` skill's `unpack.py` / `pack.py`:
+**Rewrite a Results paragraph (genre A):**
+```
+grep -A6  "#results"          references/voice_principles.md
+grep -A5  "#hedging"          references/voice_fingerprint.md
+grep -A4  "#numbers"          references/voice_fingerprint.md
+grep -A15 "#tells"            references/clinical_ai_tells.md
+```
 
+**Check a draft:** `python scripts/check_draft.py draft.txt --genre A`
+
+**Audit a manuscript before submission:**
+```
+grep -A10 "#mapping"   references/reporting_checklists.md   # find the right checklist
+grep -A30 "#strobe"    references/reporting_checklists.md   # or #consort / #stard / #tripod
+```
+
+**Apply edits to Word:**
 ```bash
 python <docx-skill>/scripts/office/unpack.py manuscript.docx unpacked/ --merge-runs false
 python scripts/apply_tracked_changes.py unpacked/ edits.json --author "Claude"
 python <docx-skill>/scripts/office/pack.py unpacked/ manuscript_revised.docx --original manuscript.docx
 ```
-
-## Writing loop (example: Results, genre A)
-
-```
-grep -A6  "#results"          references/voice_principles.md
-grep -A5  "#hedging"          references/voice_fingerprint.md   # Results ≈ 0
-grep -A4  "#numbers"          references/voice_fingerprint.md   # n/N (%) + CI
-grep -A15 "#tells"            references/clinical_ai_tells.md
-```
-
-Then: `python scripts/check_draft.py draft.txt --genre A`
